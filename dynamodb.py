@@ -1,3 +1,6 @@
+"""
+Implements identical example the CLI in Python
+
 # DynamoDB Demos
 
 ## CLI Demo
@@ -87,10 +90,6 @@ aws dynamodb delete-item \
 aws dynamodb delete-table \
     --table-name customers
 ```
+"""
 
-
-
-
-
-## References
 
