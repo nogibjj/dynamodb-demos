@@ -89,6 +89,42 @@ aws dynamodb delete-table \
 ```
 
 
+### Upload Records via JSON
+
+batch write json to dynamo
+```
+aws dynamodb 
+
+```
+
+
+```json
+// records.json
+
+[
+  {
+    "customer_id": {"N": "1"}, 
+    "name": {"S": "John Doe"}
+  },
+  {
+    "customer_id": {"N": "2"},
+    "name": {"S": "Jane Smith"} 
+  },
+  {
+    "customer_id": {"N": "3"},
+    "name": {"S": "Bob Johnson"}
+  },
+  {
+    "customer_id": {"N": "4"},
+    "name": {"S": "Sarah Davies"}
+  },
+  {
+    "customer_id": {"N": "5"},
+    "name": {"S": "Mike Wong"}
+  }
+]
+```
+
 
 
 
