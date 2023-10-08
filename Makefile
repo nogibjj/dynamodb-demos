@@ -1,24 +1,17 @@
-rust-version:
-	@echo "Rust command-line utility versions:"
-	rustc --version 			#rust compiler
-	cargo --version 			#rust package manager
-	rustfmt --version			#rust code formatter
-	rustup --version			#rust toolchain manager
-	clippy-driver --version		#rust linter
-
-format:
-	cargo fmt --quiet
-
-lint:
-	cargo clippy --quiet
+install:
+	pip install --upgrade pip &&\
+		pip install -r requirements.txt
 
 test:
-	cargo test --quiet
+	python -m pytest -vv --cov=main  test_*.py
 
-run:
-	cargo run
+format:	
+	black *.py 
 
-release:
-	cargo build --release
-
-all: format lint test run
+lint:
+	#disable comment to test speed
+	#pylint --disable=R,C --ignore-patterns=test_.*?py *.py 
+	#ruff linting is 10-100X faster than pylint
+	ruff check *.py 
+		
+all: install lint test format 
