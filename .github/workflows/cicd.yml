@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install packages
+        run: make install
+      - name: lint
+        run: make lint
+      - name: extract 
+        run: make extract 
+      - name: transform_load
+        run: make transform_load 
+      - name: query
+        run: make query
+      - name: test
+        run: make test
+      - name: format
+        run: make format
+      - name: deploy
+        run: make deploy

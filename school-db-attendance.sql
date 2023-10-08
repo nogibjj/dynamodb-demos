@@ -1,25 +1,11 @@
+-- Active: 1696708919577@@127.0.0.1@3306
 
-## Jiechen_Li_Mini_6_External_Database
+#CREATE DATABASE School_Attendance;
 
-### Purpose
+show tables;
 
-* Design a complex SQL query involving joins, aggregation, and sorting
-* Provide an explanation for what the query is doing and the expected results
-
-### Dataset
-
-The dataset is sellcted from [DATA.GOV](https://catalog.data.gov/dataset/school-attendance-by-student-group-and-district-2021-2022/resource/d923f39c-c84c-4fa9-a252-c1f6b465bd55) in the United States.
-The dataset appears to represent attendance data for various student groups across different districts in Connecticut for the academic years 2021-2022, 2020-2021, and 2019-2020.
-
-### SQL Query
-
-The goal is to compare the attendance rates of the "All Students" group in the 2021-2022 academic year against the rates in the 2020-2021 academic year for each district. We want to find districts where the attendance rate increased, remained stable (with a variation of less than 1%), or decreased.
-
-1. **Create Tables**
-
-```sql
-CREATE DATABASE School_Attendance;
 DEFAULT CHARACTER SET = 'utf8mb4';
+
 USE School_Attendance;
 
 CREATE TABLE
@@ -39,6 +25,7 @@ CREATE TABLE
     );
 
 SET GLOBAL local_infile=1;
+
 show tables;
 
 LOAD DATA
@@ -46,7 +33,18 @@ LOAD DATA
 TABLE
     School_Attendance_Table FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
 
+-- This is to ignore the header row in the CSV
+
+SELECT * FROM School_Attendance_Table LIMIT 10;
+
+#Query 1: Calculate the average attendance rate across all districts for 2021-2022.
+
+#SELECT AVG(`2021-2022_attendance_rate_-_year_to_date`) AS average_attendance_rate_2021_2022
+
+#FROM School_Attendance_Table;
+
 -- Creating the attendance_2021_2022 table
+
 CREATE TABLE
     attendance_2021_2022 (
         District_code VARCHAR(255),
@@ -79,6 +77,7 @@ FROM
     `School_Attendance_Table`;
 
 -- Creating the attendance_2020_2021 table
+
 CREATE TABLE
     attendance_2020_2021 (
         District_code VARCHAR(255),
@@ -90,6 +89,7 @@ CREATE TABLE
     );
 
 -- Inserting data into the attendance_2020_2021 table
+
 INSERT INTO
     attendance_2020_2021 (
         District_code,
@@ -109,11 +109,6 @@ SELECT
 FROM
     `School_Attendance_Table`;
 
-```
-
-2. **School Attendance Rate Difference**
-
-```sql
 WITH Comparison AS (
         SELECT
             a21.District_code,
@@ -141,24 +136,3 @@ SELECT
     rate_2020_2021
 FROM Comparison
 ORDER BY rate_difference DESC;
-```
-
-### Explanation
-
-In the WITH clause, I define a Common Table Expression (CTE) called Comparison to join the two tables (attendance_2021_2022 and attendance_2020_2021) based on the District code. This CTE filters the records for the "All Students" group and computes the difference in attendance rates between the two academic years.
-
-In the main query, I use a CASE statement to categorize the attendance trend as 'Increased', 'Stable', or 'Decreased' based on the rate difference.
-
-The final results are ordered by "rate_difference" in descending order, meaning districts with the most significant increase in attendance rate will be shown first.
-
-### Results
-
-The result will be a list of districts, their attendance rates for the "All Students" group in the 2021-2022 and 2020-2021 academic years. The visualization of top 15 districts based on rate difference in attendance is as following:
-
-<img decoding="async" src="comparison_rates.png" width="85%">  
-
-Please check ``sql_results_plot.py`` for details.
-
-### Reference
-
-Please click <a href="https://github.com/nogibjj/sqlite-lab" target="_blank">here</a> to see the template of this repo.
